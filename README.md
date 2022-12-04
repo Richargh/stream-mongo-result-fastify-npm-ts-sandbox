@@ -9,6 +9,17 @@ Shows how to stream query results from your mongodb to fastify reply with minima
 
 ### Core Concepts
 
+### Streams
+
+Streams are a pretty cool concept because they allow you to stream data from your database to your clients without loading all of them into memory at the same time. 
+They are great until you shoot yourself in the foot, like I did by using the legacy `.pipe()` method. 
+Don't use that method, because if one of the piped streams is closed or throws an error, `pipe()` will **not automatically destroy** the connected streams. 
+This can cause memory leaks in applications.
+I got a lot of `MaxListenersExceededWarning` errors and at some point realized the cursor was probably never closed and blamed fastify and looked for stuff and and and.
+**Don't use `.pipe()`.
+
+DO use `.pipeline()` because it does all the good things and has been available since node 10 or so.
+
 ### Mongoose
 
 Instead of loading all query results into memory and processing them there, we'll use a cursor to process them and pass that cursor directly to fastify.
@@ -32,6 +43,7 @@ Optionally, [install MongoDb Compass](https://www.mongodb.com/try/download/compa
 
 * Start server: `npm run start` and then, via [httpie](https://httpie.io/) or cURL:
     * GET csv `http GET "localhost:8080/articles?format=csv"`
+    * Or open the url in your browser to download the file: `http GET "localhost:8080/articles?format=csv"`
 
 ## Created via
 

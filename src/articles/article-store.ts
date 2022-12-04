@@ -22,48 +22,9 @@ export async function putArticle(article: Article): Promise<void> {
     await ActiveArticle.updateOne({_id: article._id}, article, {upsert: true});
 }
 
-
-const streamHandler = new Transform({
-    readableObjectMode: true,
-    writableObjectMode: true, // Enables us to use object in chunk
-    transform(chunk: Article, encoding, callback) {
-        const { _id, title } = chunk;
-        const row = { id: _id, title };
-        this.push(row);
-
-        callback();
-    },
-});
-
 export function findAllArticles(): Readable {
-    const cursor = ActiveArticle
+    return  ActiveArticle
         .find()
-        .cursor({transform: JSON.stringify});
-
-    // const data = [];
-    // for await (const doc of cursor) {
-    //     console.log(`Found row: ${doc}`);
-    //     data.push(doc);
-    // }
-
-    return cursor;
-}
-
-async function generateReport(){
-    let articleCursor = ActiveArticle
-        .find({active:true})
-        .cursor({transform: (article: HydratedDocument<Article>) =>{
-            const {_id:id, title} = article.toObject()
-            return {id, title}
-        }});
-
-    //create object to csv transformer
-    let csvStream = stringify({
-        header: true,
-        columns: {
-            title: 'TITLE'
-        }
-    });
-
-    const bla: Stringifier = pipeline(articleCursor, csvStream)
+        .lean()
+        .cursor();
 }

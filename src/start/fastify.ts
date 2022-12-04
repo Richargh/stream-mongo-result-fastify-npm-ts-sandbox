@@ -8,6 +8,10 @@ export function startFastify(){
     initPeopleRoute(server);
     initArticleRoute(server);
 
+    server.setErrorHandler(function (error, request, reply) {
+        console.error(error);
+    })
+
     server.listen({ port: 8080 }, (err, address) => {
         if (err) {
             console.error(err);
