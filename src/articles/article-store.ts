@@ -27,12 +27,7 @@ const streamHandler = new Transform({
     readableObjectMode: true,
     writableObjectMode: true, // Enables us to use object in chunk
     transform(chunk: Article, encoding, callback) {
-        // chunk: { userId: "userA", firstName: "John", lastName: "Doe", email: "john@email.com" }
-        /** Mapping Handling row to header */
         const { _id, title } = chunk;
-
-        console.log(`Working on: ${chunk}`);
-
         const row = { id: _id, title };
         this.push(row);
 
@@ -41,14 +36,22 @@ const streamHandler = new Transform({
 });
 
 export function findAllArticles(): Readable {
-    return ActiveArticle
+    const cursor = ActiveArticle
         .find()
         .cursor()
-        .on('data', doc => { console.log(`Store found: ${doc}`); })
+        // .on('data', doc => { console.log(`Store found: ${doc}`); })
+        .on('end', () => { console.log(`Destroying cursor`); cursor.close(); cursor.destroy() });
+
+    // const data = [];
+    // for await (const doc of cursor) {
+    //     console.log(`Found row: ${doc}`);
+    //     data.push(doc);
+    // }
+
+    return cursor
         .map((doc) => {
             return doc;
         })
-        .on('data', doc => { console.log(`Store again: ${doc}`); })
         .pipe(streamHandler)
 }
 
