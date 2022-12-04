@@ -1,6 +1,6 @@
 import { Schema, model, HydratedDocument } from 'mongoose';
 import {Stringifier, stringify} from "csv-stringify";
-import {pipeline, Readable} from "stream";
+import {pipeline, Readable, Transform} from "stream";
 
 export type Article = {
     _id: string;
@@ -22,11 +22,34 @@ export async function putArticle(article: Article): Promise<void> {
     await ActiveArticle.updateOne({_id: article._id}, article, {upsert: true});
 }
 
-export async function findAllArticles(): Promise<Readable> {
+
+const streamHandler = new Transform({
+    readableObjectMode: true,
+    writableObjectMode: true, // Enables us to use object in chunk
+    transform(chunk: Article, encoding, callback) {
+        // chunk: { userId: "userA", firstName: "John", lastName: "Doe", email: "john@email.com" }
+        /** Mapping Handling row to header */
+        const { _id, title } = chunk;
+
+        console.log(`Working on: ${chunk}`);
+
+        const row = { id: _id, title };
+        this.push(row);
+
+        callback();
+    },
+});
+
+export function findAllArticles(): Readable {
     return ActiveArticle
         .find()
-        .cursor({transform: JSON.stringify})
-        .on('data', doc => { console.log(`Store found ${doc}`); });
+        .cursor()
+        .on('data', doc => { console.log(`Store found: ${doc}`); })
+        .map((doc) => {
+            return doc;
+        })
+        .on('data', doc => { console.log(`Store again: ${doc}`); })
+        .pipe(streamHandler)
 }
 
 async function generateReport(){
@@ -41,7 +64,7 @@ async function generateReport(){
     let csvStream = stringify({
         header: true,
         columns: {
-            title: 'TITLE',
+            title: 'TITLE'
         }
     });
 
