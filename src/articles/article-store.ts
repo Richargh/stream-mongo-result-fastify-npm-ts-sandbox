@@ -38,9 +38,7 @@ const streamHandler = new Transform({
 export function findAllArticles(): Readable {
     const cursor = ActiveArticle
         .find()
-        .cursor()
-        // .on('data', doc => { console.log(`Store found: ${doc}`); })
-        .on('end', () => { console.log(`Destroying cursor`); cursor.close(); cursor.destroy() });
+        .cursor({transform: JSON.stringify});
 
     // const data = [];
     // for await (const doc of cursor) {
@@ -48,11 +46,7 @@ export function findAllArticles(): Readable {
     //     data.push(doc);
     // }
 
-    return cursor
-        .map((doc) => {
-            return doc;
-        })
-        .pipe(streamHandler)
+    return cursor;
 }
 
 async function generateReport(){

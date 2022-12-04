@@ -1,7 +1,7 @@
 import {FastifyInstance} from "fastify";
 import {Article, findAllArticles} from "./article-store";
 import {stringify} from "csv-stringify";
-import {Transform} from "stream";
+import {pipeline, Transform} from "stream";
 
 const csvStream = stringify({
     header: true,
@@ -28,9 +28,9 @@ export function initArticleRoute(server: FastifyInstance) {
         console.log("# Find articles");
 
         const data: string[] = [];
-        const articles = findAllArticles()
-            .pipe(csvHandler)
-            .on('data', doc => { console.log(`Srvr: ${doc}`); data.push(doc) });
+        const articles = findAllArticles();
+
+        // pipeline(articles, csvHandler)
 
             // .on('data', doc => { console.log(doc); });
             // .pipe(reply.type('json));
@@ -44,10 +44,7 @@ export function initArticleRoute(server: FastifyInstance) {
 
         await reply
             .header('Content-Type', 'application/octet-stream')
-            .type('text/csv')
+            .type('application/json')
             .send(articles);
-
-        articles.end()
-        articles.destroy()
     });
 }
