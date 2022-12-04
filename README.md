@@ -1,9 +1,19 @@
 # Stream Mongo Results to Fastify Route (Sandbox)
 
+Shows how to stream query results from your mongodb to fastify reply with minimal memory allocation involved. See [article-route](src/articles/article-route.ts) and [article-store](src/articles/article-store.ts) for details.
+
 ## Features
 
 * Fastify + TypeScript
 * MongoDb + Mongoose
+
+### Core Concepts
+
+### Mongoose
+
+Instead of loading all query results into memory and processing them there, we'll use a cursor to process them and pass that cursor directly to fastify.
+
+The `cursor()` lets you process query results one-at-a-time. The old `stream()` function was removed in 5.0. In the majority of cases, `cursor()` is a drop-in replacement for `stream()`. 
 
 ## Preconditions
 
