@@ -1,0 +1,21 @@
+# Blocklist files/folders in same directory as the .gitignore file
+/*
+
+# But not these files
+
+## Git
+!.gitignore
+
+## README
+!README.md
+
+## Node
+!.nvmrc
+!package.json
+!package-lock.json
+
+## TypeScript
+!tsconfig.json
+
+## Src
+!src/
