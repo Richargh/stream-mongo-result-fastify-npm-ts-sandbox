@@ -1,11 +1,19 @@
 # Stream Mongo Results to Fastify Route (Sandbox)
 
-Shows how to stream query results from your mongodb to fastify reply with minimal memory allocation involved. See [article-route](src/articles/article-route.ts) and [article-store](src/articles/article-store.ts) for details.
+Shows how to stream query results from your mongodb to fastify reply with minimal memory allocation involved. 
+
+* See [article-route](src/articles/article-route.ts) and [article-store](src/articles/article-store.ts) for csv stream example.
+
+See [feed-route](src/feed/feed-route.ts) for concatenate two streams example.
 
 ## Features
 
 * Fastify + TypeScript
 * MongoDb + Mongoose
+* Streams3 Api and concatenating streams
+* [Newline-Deliminated Json](https://en.wikipedia.org/wiki/JSON_streaming#Newline-Delimited_JSON)
+  * One standard is [ndson](http://ndjson.org/) aka `application/x-ndjson`, see also the [spec](https://github.com/ndjson/ndjson-spec).
+  * Another standard is [jsonlines](https://jsonlines.org/)
 
 ### Core Concepts
 

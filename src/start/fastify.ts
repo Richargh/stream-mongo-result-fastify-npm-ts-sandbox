@@ -1,12 +1,14 @@
 import fastify from "fastify";
 import {initArticleRoute} from "../articles/article-route";
 import {initPeopleRoute} from "../people/people-route";
+import {initFeedRoute} from "../feed/feed-route";
 
 export function startFastify(){
     const server = fastify();
 
     initPeopleRoute(server);
     initArticleRoute(server);
+    initFeedRoute(server);
 
     server.setErrorHandler(function (error, request, reply) {
         console.error(error);

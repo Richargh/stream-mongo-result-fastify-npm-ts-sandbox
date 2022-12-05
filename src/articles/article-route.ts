@@ -1,7 +1,8 @@
 import {FastifyInstance} from "fastify";
-import {Article, findAllArticles} from "./article-store";
+import {findAllArticles} from "./article-store";
 import {stringify} from "csv-stringify";
 import {pipeline, Readable, Transform, Writable} from "stream";
+import {logError} from "../commons/error/log";
 
 export function initArticleRoute(server: FastifyInstance) {
 
@@ -16,7 +17,7 @@ export function initArticleRoute(server: FastifyInstance) {
         });
 
         const articleStream = findAllArticles();
-        const result = pipeline(articleStream, csvStream, err => { if(err != null) console.error(err); });
+        const result = pipeline(articleStream, csvStream, logError);
 
         await reply
             .header('Content-Type', 'application/octet-stream')

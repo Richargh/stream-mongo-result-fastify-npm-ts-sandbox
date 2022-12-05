@@ -1,6 +1,6 @@
-import { Schema, model, HydratedDocument } from 'mongoose';
-import {Stringifier, stringify} from "csv-stringify";
-import {pipeline, Readable, Transform} from "stream";
+import { Schema, model } from 'mongoose';
+import {Readable} from "stream";
+import {jsonStringify} from "../commons/stringify/json-stringify";
 
 export type Article = {
     _id: string;
@@ -22,9 +22,17 @@ export async function putArticle(article: Article): Promise<void> {
     await ActiveArticle.updateOne({_id: article._id}, article, {upsert: true});
 }
 
-export function findAllArticles(): Readable {
+// TODO add type hints
+export function findAllArticles(options?: ArticleQueryOptions): Readable {
+
     return  ActiveArticle
         .find()
         .lean()
-        .cursor();
+        .cursor(options?.stringify ? {transform: jsonStringify} : undefined);
 }
+
+export type ArticleQueryOptions = {
+    stringify: boolean
+}
+
+// TODO add change streams
