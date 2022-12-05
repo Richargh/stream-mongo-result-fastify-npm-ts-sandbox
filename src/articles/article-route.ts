@@ -3,7 +3,7 @@ import {findAllArticles} from "./article-store";
 import {stringify} from "csv-stringify";
 import {pipeline, Readable, Stream, Transform} from "stream";
 import {logError} from "../commons/error/log";
-import {stringifyAsJsonStream} from "../commons/stringify/stringify-json";
+import {stringifyAsJsonStream} from "../commons/stream/stringify-json-stream";
 
 export function initArticleRoute(server: FastifyInstance) {
 

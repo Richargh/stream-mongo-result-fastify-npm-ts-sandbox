@@ -5,14 +5,16 @@ import {stringifyJson} from "../commons/stringify/stringify-json";
 export type Article = {
     _id: string;
     title: string;
+    priceLabel?: string;
 }
 
 const articleSchema = new Schema<Article>({
     _id: { type: String, required: true },
-    title: { type: String, required: true }
+    title: { type: String, required: true },
+    priceLabel: { type: String, required: false },
 });
 
-const ActiveArticle = model<Article>('User', articleSchema);
+const ActiveArticle = model<Article>('Article', articleSchema);
 
 /**
  * Create or update article
@@ -24,7 +26,6 @@ export async function putArticle(article: Article): Promise<void> {
 
 // TODO add type hints
 export function findAllArticles(options?: ArticleQueryOptions): Readable {
-
     return  ActiveArticle
         .find()
         .lean()

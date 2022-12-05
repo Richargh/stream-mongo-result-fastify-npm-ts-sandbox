@@ -2,9 +2,9 @@
 
 Shows how to stream query results from your mongodb to fastify reply with minimal memory allocation involved. 
 
-* See [article-route](src/articles/article-route.ts) and [article-store](src/articles/article-store.ts) for csv stream example.
-
-See [feed-route](src/feed/feed-route.ts) for concatenate two streams example.
+* See [article-route](src/articles/article-route.ts) and [article-store](src/articles/article-store.ts) for _csv stream_ example.
+* See [feed-route](src/feed/feed-route.ts) for _concatenate two streams_ example.
+* See [store-route](src/store/store-route.ts) for _mapping stream entries_ example.
 
 ## Features
 
