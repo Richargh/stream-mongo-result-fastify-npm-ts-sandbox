@@ -1,6 +1,6 @@
 import {model, Schema} from "mongoose";
 import {Readable} from "stream";
-import {jsonStringify} from "../commons/stringify/json-stringify";
+import {stringifyJson} from "../commons/stringify/stringify-json";
 
 export type Pin = {
     _id: string;
@@ -27,7 +27,7 @@ export function findAllPins(userId: string, options?: PinQueryOptions): Readable
     return ActivePin
         .find()
         .lean()
-        .cursor(options?.stringify ? {transform: jsonStringify} : undefined);
+        .cursor(options?.stringify ? {transform: stringifyJson} : undefined);
 }
 
 export type PinQueryOptions = {

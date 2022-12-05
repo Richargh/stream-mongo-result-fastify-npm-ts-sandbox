@@ -1,6 +1,6 @@
 import { Schema, model } from 'mongoose';
 import {Readable} from "stream";
-import {jsonStringify} from "../commons/stringify/json-stringify";
+import {stringifyJson} from "../commons/stringify/stringify-json";
 
 export type Article = {
     _id: string;
@@ -28,7 +28,7 @@ export function findAllArticles(options?: ArticleQueryOptions): Readable {
     return  ActiveArticle
         .find()
         .lean()
-        .cursor(options?.stringify ? {transform: jsonStringify} : undefined);
+        .cursor(options?.stringify ? {transform: stringifyJson} : undefined);
 }
 
 export type ArticleQueryOptions = {
