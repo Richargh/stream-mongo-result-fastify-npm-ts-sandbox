@@ -2,9 +2,9 @@
 
 Shows how to stream query results from your mongodb to fastify reply with minimal memory allocation involved. 
 
-* See [article-route](src/articles/article-route.ts) and [article-store](src/articles/article-store.ts) for _csv stream_ example.
-* See [feed-route](src/feed/feed-route.ts) for _concatenate two streams_ example.
-* See [store-route](src/store/store-route.ts) for _mapping stream entries_ example.
+* See [article-route](src/articles/article-route.ts) and [article-store](src/articles/article-store.ts) for _csv (file) stream_ example. Usage [below](#csv-stream).
+* See [feed-route](src/feed/feed-route.ts) for _concatenate two streams_ example. Usage [below](#concatenate-stream).
+* See [store-route](src/store/store-route.ts) for _mapping stream entries_ example. Usage [below](#map-stream).
 
 ## Features
 
@@ -49,9 +49,19 @@ Optionally, [install MongoDb Compass](https://www.mongodb.com/try/download/compa
 
 ## Usage
 
-* Start server: `npm run start` and then, via [httpie](https://httpie.io/) or cURL:
-    * GET csv `http GET "localhost:8080/articles?format=csv"`
-    * Or open the url in your browser to download the file: `http GET "localhost:8080/articles?format=csv"`
+Start server: `npm run start` and then, via [httpie](https://httpie.io/) or cURL issues one of the actions below:
+
+### CSV Stream
+
+GET article csv `http GET "localhost:8080/articles?format=csv"` or open the url in your browser to download the file: http://localhost:8080/articles?format=csv&asFile=true
+
+### Concatenate Stream
+
+GET csv `http GET "localhost:8080/feed"`
+
+### Map Stream
+
+GET store `http GET "localhost:8080/store"`
 
 ## Created via
 
